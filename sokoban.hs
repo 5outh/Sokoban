@@ -96,24 +96,20 @@ moveBox dir point world@(World plr bxs wls sws) = world'
                                    (map Box (boxPoint: delete point bxs'))
                                    wls
                                    sws
-                                    -- Still needs to keep track of which switches are on
-                                    --update box position and player position --update world normally, move box and plr, update switch!
           | otherwise            = World 
                                    (Player point)
                                    (map Box (boxPoint: delete point bxs'))
                                    wls
-                                   sws --update box position and player position
+                                   sws
 
---Passes possible new player point to moveBox with unupdated world
 movePlayer :: Direction -> Point -> World Square -> World Square
 movePlayer dir point w@(World _ boxes walls switches)
   | point `elem` bxs  = moveBox dir point w
   | point `elem` wls  = w
-  | point `elem` sws  = World (Player point) boxes walls switches --needs to turn off switch
+  | point `elem` sws  = World (Player point) boxes walls switches
   | otherwise         = World (Player point) boxes walls switches
   where wPoints@(World _ bxs wls sws) = fmap getPoint w
 
--- Passes new point for player to move to to movePlayer along with direction
 updateBoard :: Direction -> World Square -> World Square
 updateBoard dir w = movePlayer dir p' w
   where p' = movePoint (getPoint $ player w) dir
