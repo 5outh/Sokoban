@@ -1,7 +1,7 @@
 import Graphics.Gloss.Interface.Pure.Game
 import Data.Maybe (fromJust)
 import Data.List(delete)
-import Control.Applicative
+import Types
 
 main = play 
   (InWindow "Sokoban" (800, 600) (400, 400))
@@ -32,27 +32,6 @@ worldToPicture :: World Square -> Picture
 worldToPicture w@(World p bxs wls sws) = 
   Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
 
---type Point = (Int, Int)
-
-data Square = Player Point
-            | Box Point 
-            | Wall Point 
-            | Switch Point 
-            | Floor Point
-            deriving (Show, Eq)
-            
-data World a = World
-  { player :: a,
-    boxes :: [a],
-    walls :: [a],
-    switches :: [a]
-  } deriving (Show, Eq)
-
-instance Functor World where
-  fmap f (World p bxs wls sws) = World (f p) (map f bxs) (map f wls) (map f sws)
-  
-data Direction = L | R | U | D | Other deriving (Show, Eq)
-  
 level = unlines [
   "####"
   ,"# .#"
@@ -84,7 +63,7 @@ showSquare square = case square of
                      (Wall p)         -> Color black  $ drawSquare p
                      (Player p)       -> Color red    $ drawSquare p          
                      (Box p)          -> Color violet $ drawSquare p
-                     (Switch p)       -> Color blue $ drawSquare p   
+                     (Switch p)       -> Color blue   $ drawSquare p   
                      (Floor p)        -> Color white  $ drawSquare p
 
 drawSquare (x, y) = Translate (16*x) (16*y) $ rectangleSolid 16 16
