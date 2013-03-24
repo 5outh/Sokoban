@@ -6,6 +6,7 @@ import Graphics.Gloss(Point)
 import Types
 import World
 import Square
+import Text.ParserCombinators.Parsec
 
 parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
@@ -26,3 +27,18 @@ parseLevel level = case (player initWorld) of
                        _              -> w
         emptyWorld = World (Player (-1,-1)) [] [] []
         initWorld = populateWorld (lns >>= sqrs) emptyWorld
+
+parseLevelFromFile f = do
+	contents <- readFile f
+	return contents
+
+--parseLevel' :: String -> Either ParseError (World Square)
+parseLevel' level = parse square "(unknown)" level
+
+square :: Parser [Square]
+square = do
+	s <- oneOf "@#*. $" <|> error "unknown type"
+	return $ fix (getSquare s) (1, 1)
+		where fix xs y = zipWith ($) xs (repeat y)
+	
+testParse = parseLevel' "@#. $$"
