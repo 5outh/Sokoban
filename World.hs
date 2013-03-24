@@ -4,7 +4,7 @@ module World(
 	stepWorld
 ) where
 
-import Graphics.Gloss.Interface.Pure.Game
+import Graphics.Gloss(Picture(..))
 import Types
 import Square
 
@@ -15,6 +15,7 @@ worldToPicture :: World Square -> Picture
 worldToPicture w@(World p bxs wls sws) = 
   Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
 
+winningWorld :: World Square -> Bool
 winningWorld w = all (`elem` bxs) sws
   where (World _ bxs _ sws) = fmap getPoint w
 

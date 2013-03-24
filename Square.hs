@@ -26,8 +26,10 @@ showSquare square = case square of
                      (Switch p)       -> Color blue   $ drawSquare p   
                      (Floor p)        -> Color white  $ drawSquare p
 
+drawSquare :: (Float, Float) -> Picture
 drawSquare (x, y) = Translate (16*x) (16*y) $ rectangleSolid 16 16
 
+getPoint :: Square -> Point
 getPoint square = case square of
                     (Wall p)     -> p
                     (Player p)   -> p

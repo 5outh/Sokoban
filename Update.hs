@@ -7,7 +7,7 @@ module Update(
 	eventHandler
 ) where
 
-import Graphics.Gloss
+import Graphics.Gloss(Point)
 import Graphics.Gloss.Interface.Pure.Game
 import World
 import Types
@@ -80,6 +80,7 @@ updateBoard dir w = movePlayer dir p' w
   where p' = movePoint (getPoint $ player w) dir
 
 eventHandler :: Event -> World Square -> World Square
+eventHandler e@(EventMotion coord) = id
 eventHandler e@(EventKey key keyState mods coord) = 
   if keyState == Down then 
     case key of
@@ -89,5 +90,3 @@ eventHandler e@(EventKey key keyState mods coord) =
                     (SpecialKey KeyRight) -> updateBoard R
                     _                     -> id
   else id
-
-eventHandler e@(EventMotion coord) = id

@@ -7,6 +7,7 @@ import Types
 import World
 import Square
 
+parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
                         (Player (-1,-1)) -> error "No player on board"
                         (Player _      ) -> initWorld
