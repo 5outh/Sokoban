@@ -4,7 +4,8 @@ module Update(
 	moveBox,
 	movePlayer,
 	updateBoard,
-	eventHandler
+	eventHandler,
+	stepWorld
 ) where
 
 import Graphics.Gloss(Point)
@@ -90,3 +91,6 @@ eventHandler e@(EventKey key keyState mods coord) =
                     (SpecialKey KeyRight) -> updateBoard R
                     _                     -> id
   else id
+
+stepWorld :: Float -> World Square -> World Square
+stepWorld _ = id

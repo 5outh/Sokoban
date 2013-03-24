@@ -1,7 +1,6 @@
 module World(
 	worldToPicture,
-	winningWorld,
-	stepWorld
+	winningWorld
 ) where
 
 import Graphics.Gloss(Picture(..))
@@ -18,6 +17,3 @@ worldToPicture w@(World p bxs wls sws) =
 winningWorld :: World Square -> Bool
 winningWorld w = all (`elem` bxs) sws
   where (World _ bxs _ sws) = fmap getPoint w
-
-stepWorld :: Float -> World Square -> World Square
-stepWorld _ = id
