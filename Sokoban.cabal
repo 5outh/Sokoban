@@ -44,7 +44,7 @@ cabal-version:       >=1.8
 
 executable Sokoban
   -- .hs or .lhs file containing the Main module.
-  -- main-is:             
+   main-is: sokoban.hs             
   
   -- Modules included in this executable, other than Main.
   -- other-modules:       
