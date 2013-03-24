@@ -19,8 +19,5 @@ data World a = World
     walls :: [a],
     switches :: [a]
   } deriving (Show, Eq)
-
-instance Functor World where
-  fmap f (World p bxs wls sws) = World (f p) (map f bxs) (map f wls) (map f sws)
   
 data Direction = L | R | U | D | Other deriving (Show, Eq)
