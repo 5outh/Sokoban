@@ -1,3 +1,4 @@
-import Update
+import qualified Update as U
+import LevelParser
 
-main = runGame
+main = writeSasquatch "../s1.txt" --U.runGame

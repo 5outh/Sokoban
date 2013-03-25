@@ -1,5 +1,6 @@
 module LevelParser(
-	parseLevel
+	parseLevel,
+  writeSasquatch
 )where
 
 import Graphics.Gloss(Point)
@@ -42,3 +43,37 @@ square = do
 		where fix xs y = zipWith ($) xs (repeat y)
 	
 testParse = parseLevel' "@#. $$"
+
+writeSasquatch :: FilePath -> IO ()
+writeSasquatch file = do
+  contents <- readFile file
+  let levels = case parseSasquatch contents of
+                  Right x -> zip (map (\x -> "levels\\level" ++ toThousand x ++ ".lvl") [1..]) x
+                  Left _  -> error "Parse error"
+      doWrite (a, b) = writeFile a b
+  mapM_ (doWrite) levels
+  putStrLn contents
+
+toThousand :: Int -> String
+toThousand x
+  | x < 10   = "00" ++ show x
+  | x < 100  = "0" ++ show x
+  | x < 1000 = show x
+  | otherwise = error "number is greater than 1000"
+
+parseSasquatch :: String -> Either ParseError [String]
+parseSasquatch = parse sasquatch "(unknown)"
+
+--ignore whitespace, break on ;, consume space and int
+sasquatch :: Parser [String]
+sasquatch = do
+  levels <- many level
+  return levels
+  
+level :: Parser String
+level = do
+  spaces
+  contents <- many $ noneOf ";"
+  space
+  anyChar
+  return contents
