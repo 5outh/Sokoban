@@ -19,7 +19,6 @@ import LevelParser
 
 runGame = do
   level <- readFile "levels/level001.lvl"
-  mapM putStrLn $ lines level
   play 
     (InWindow "Sokoban" (800, 600) (400, 400))
     white
@@ -28,16 +27,6 @@ runGame = do
     worldToPicture
     eventHandler
     stepWorld
-  
-{-level = unlines [
-  "####"
-  ,"# .#"
-  ,"#  ###"
-  ,"#*@  #"
-  ,"#  $ #"
-  ,"#  ###"
-  ,"####"]
--}
 
 moveBackwards :: Point -> Direction -> Point
 moveBackwards p dir = movePoint p $ fromJust $ lookup dir opposites

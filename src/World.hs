@@ -12,7 +12,9 @@ instance Functor World where
 
 worldToPicture :: World Square -> Picture
 worldToPicture w@(World p bxs wls sws) = 
-  Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
+  if not $ winningWorld w then
+    Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
+  else Translate (-100) 0 $ Scale 0.5 0.5 $ Text "You Win!"
 
 winningWorld :: World Square -> Bool
 winningWorld w = all (`elem` bxs) sws

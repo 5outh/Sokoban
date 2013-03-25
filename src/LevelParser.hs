@@ -8,7 +8,7 @@ import Types
 import World
 import Square
 import Text.ParserCombinators.Parsec
-import Data.List(intercalate)
+import Control.Monad.Trans
 
 parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
@@ -52,17 +52,23 @@ writeSasquatch file = do
 parseSasquatch :: String -> Either ParseError [String]
 parseSasquatch = parse (many level) "(unknown)"
 
+--TODO: Still needs to handle getting rid of levels with titles
 level :: Parser String
 level = do
-  newline
+  spaces
   char ';'
   space
   many $ oneOf ['0'..'9']
-  many newline
-  contents <- many line
-  return (intercalate "\n" contents)
-
-line = do
-  contents <- many $ oneOf "#@$*. "
-  newline
+  contents <- many $ noneOf ";"
   return contents
+
+nada :: Parser ()
+nada = return ()
+
+title :: Parser ()
+title = do
+  space
+  char '\''
+  many $ noneOf "\'"
+  char '\''
+  return ()
