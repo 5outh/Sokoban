@@ -48,11 +48,11 @@ writeSasquatch :: FilePath -> IO ()
 writeSasquatch file = do
   contents <- readFile file
   let levels = case parseSasquatch contents of
-                  Right x -> zip (map (\x -> "levels/level" ++ toThousand x ++ ".lvl") [1..]) x
+                  Right x -> zip (map (\x -> "levels\\level" ++ toThousand x ++ ".lvl") [1..]) x
                   Left _  -> error "Parse error"
       doWrite (a, b) = writeFile a b
   mapM_ (doWrite) levels
-  putStrLn contents
+  return ()
 
 toThousand :: Int -> String
 toThousand x
