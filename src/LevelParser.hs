@@ -8,6 +8,7 @@ import Types
 import World
 import Square
 import Text.ParserCombinators.Parsec
+import Data.List(intercalate)
 
 parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
@@ -29,52 +30,39 @@ parseLevel level = case (player initWorld) of
         emptyWorld = World (Player (-1,-1)) [] [] []
         initWorld = populateWorld (lns >>= sqrs) emptyWorld
 
-parseLevelFromFile f = do
-	contents <- readFile f
-	return contents
-
---parseLevel' :: String -> Either ParseError (World Square)
-parseLevel' level = parse square "(unknown)" level
-
-square :: Parser [Square]
-square = do
-	s <- oneOf "@#*. $" <|> error "unknown type"
-	return $ fix (getSquare s) (1, 1)
-		where fix xs y = zipWith ($) xs (repeat y)
-	
-testParse = parseLevel' "@#. $$"
-
-writeSasquatch :: FilePath -> IO ()
-writeSasquatch file = do
-  contents <- readFile file
-  let levels = case parseSasquatch contents of
-                  Right x -> zip (map (\x -> "levels\\level" ++ toThousand x ++ ".lvl") [1..]) x
-                  Left _  -> error "Parse error"
-      doWrite (a, b) = writeFile a b
-  mapM_ (doWrite) levels
-  return ()
-
 toThousand :: Int -> String
 toThousand x
   | x < 10   = "00" ++ show x
   | x < 100  = "0" ++ show x
   | x < 1000 = show x
   | otherwise = error "number is greater than 1000"
+        
+writeSasquatch :: FilePath -> IO ()
+writeSasquatch file = do
+  contents <- readFile file
+  let levels = case parseSasquatch contents of
+                  Right a -> zip (map 
+                             (\x -> "levels/level" ++ toThousand x ++ ".lvl") [1..]) 
+                             a
+                  Left _  -> error "Parse error"
+      doWrite (a, b) = writeFile a b
+  mapM_ doWrite levels
+  return ()
 
 parseSasquatch :: String -> Either ParseError [String]
-parseSasquatch = parse sasquatch "(unknown)"
+parseSasquatch = parse (many level) "(unknown)"
 
---ignore whitespace, break on ;, consume space and int
-sasquatch :: Parser [String]
-sasquatch = do
-  levels <- many level
-  return levels
-  
 level :: Parser String
 level = do
-  spaces
+  newline
   char ';'
   space
-  anyChar
-  contents <- many $ noneOf ";"
+  many $ oneOf ['0'..'9']
+  many newline
+  contents <- many line
+  return (intercalate "\n" contents)
+
+line = do
+  contents <- many $ oneOf "#@$*. "
+  newline
   return contents

@@ -16,7 +16,7 @@ getSquare c = case c of
                 '*' -> [Switch, Box]
                 ' ' -> [Floor]
                 '$' -> [Box]
-                _   -> error "Invalid symbol on board"
+                _   -> []
 
 showSquare :: Square -> Picture
 showSquare square = case square of

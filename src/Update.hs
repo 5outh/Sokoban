@@ -17,17 +17,19 @@ import Data.Maybe (fromJust)
 import Data.List(delete)
 import LevelParser
 
-
-runGame = play 
-  (InWindow "Sokoban" (800, 600) (400, 400))
-  white
-  45
-  (parseLevel level)
-  worldToPicture
-  eventHandler
-  stepWorld
-
-level = unlines [
+runGame = do
+  level <- readFile "levels/level001.lvl"
+  mapM putStrLn $ lines level
+  play 
+    (InWindow "Sokoban" (800, 600) (400, 400))
+    white
+    45
+    (parseLevel level)
+    worldToPicture
+    eventHandler
+    stepWorld
+  
+{-level = unlines [
   "####"
   ,"# .#"
   ,"#  ###"
@@ -35,6 +37,7 @@ level = unlines [
   ,"#  $ #"
   ,"#  ###"
   ,"####"]
+-}
 
 moveBackwards :: Point -> Direction -> Point
 moveBackwards p dir = movePoint p $ fromJust $ lookup dir opposites
