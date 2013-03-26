@@ -59,6 +59,8 @@ level = do
   char ';'
   space
   many $ oneOf ['0'..'9']
+  optional space
+  optional title
   contents <- many $ noneOf ";"
   return contents
 
