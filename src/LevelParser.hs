@@ -69,7 +69,6 @@ nada = return ()
 
 title :: Parser ()
 title = do
-  space
   char '\''
   many $ noneOf "\'"
   char '\''
