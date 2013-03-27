@@ -8,7 +8,12 @@ import Types
 import World
 import Square
 import Text.ParserCombinators.Parsec
+<<<<<<< HEAD
 import Control.Monad.Trans
+=======
+import Text.Parsec
+import qualified Control.Monad.State as S
+>>>>>>> butt
 
 parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
@@ -52,6 +57,7 @@ writeSasquatch file = do
 parseSasquatch :: String -> Either ParseError [String]
 parseSasquatch = parse (many level) "(unknown)"
 
+<<<<<<< HEAD
 --TODO: Still needs to handle getting rid of levels with titles
 level :: Parser String
 level = do
@@ -73,3 +79,15 @@ title = do
   many $ noneOf "\'"
   char '\''
   return ()
+=======
+square :: Parser [Square]
+square = do
+	s <- oneOf "@#*. $" <|> error "unknown type"
+	return $ fix (getSquare s) (1, 1)
+		where fix xs y = zipWith ($) xs (repeat y)
+	
+testParse = parseLevel' "@#. $$"
+
+parseLevel'' :: String -> ParsecT String (World Square) (State Point) (World Square)
+parseLevel'' = undefined
+>>>>>>> butt
