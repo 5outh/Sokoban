@@ -1,6 +1,7 @@
 module LevelParser(
 	parseLevel,
-  writeSasquatch
+  writeSasquatch,
+  toThousand
 )where
 
 import Graphics.Gloss(Point)
@@ -29,13 +30,6 @@ parseLevel level = case (player initWorld) of
                        _              -> w
         emptyWorld = Level (Player (-1,-1)) [] [] []
         initWorld = populateWorld (lns >>= sqrs) emptyWorld
-
-toThousand :: Int -> String
-toThousand x
-  | x < 10   = "00" ++ show x
-  | x < 100  = "0" ++ show x
-  | x < 1000 = show x
-  | otherwise = error "number is greater than 1000"
         
 writeSasquatch :: FilePath -> IO ()
 writeSasquatch file = do

@@ -5,6 +5,7 @@ import Update
 import LevelParser
 import Data.Char(toLower)
 import System.Environment(getArgs)
+import Save
 
 main = do
   args <- getArgs

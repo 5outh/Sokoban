@@ -3,7 +3,9 @@ module World(
 	winningLevel,
   gameToPicture,
   nextLevel,
-  winningGame
+  winningGame,
+  toThousand,
+  gameToFileName
 ) where
 
 import Graphics.Gloss(Picture(..))
@@ -31,3 +33,13 @@ nextLevel (Game i _ _) = succ i
 
 winningGame :: Game -> Bool
 winningGame (Game _ lvl _) = winningLevel lvl
+
+gameToFileName :: Game -> String
+gameToFileName (Game i _ _) = "levels/level" ++ (toThousand i) ++ ".lvl"
+
+toThousand :: Int -> String
+toThousand x
+  | x < 10   = "00" ++ show x
+  | x < 100  = "0" ++ show x
+  | x < 1000 = show x
+  | otherwise = error "number is greater than 1000"
