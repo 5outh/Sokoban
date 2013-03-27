@@ -10,7 +10,7 @@ import Square
 import Text.ParserCombinators.Parsec
 import Text.Parsec
 
-parseLevel :: String -> World Square
+parseLevel :: String -> Level Square
 parseLevel level = case (player initWorld) of
                         (Player (-1,-1)) -> error "No player on board"
                         (Player _      ) -> initWorld
@@ -20,14 +20,14 @@ parseLevel level = case (player initWorld) of
         sqrs (a, xs) = concatMap fix $ zip (map getSquare xs) ((zip [1..] (repeat a)) :: [Point])
                         where fix (xs, y) = zipWith ($) xs (repeat y)
         populateWorld [] w = w
-        populateWorld (p:points) w@(World plr bxs wls sws) = populateWorld points w'
+        populateWorld (p:points) w@(Level plr bxs wls sws) = populateWorld points w'
           where w' = case p of
-                       p@(Player _)   -> World p bxs wls sws
-                       b@(Box _ )     -> World plr (b:bxs) wls sws
-                       w@(Wall _)     -> World plr bxs (w:wls) sws
-                       s@(Switch _)   -> World plr bxs wls (s:sws)
+                       p@(Player _)   -> Level p bxs wls sws
+                       b@(Box _ )     -> Level plr (b:bxs) wls sws
+                       w@(Wall _)     -> Level plr bxs (w:wls) sws
+                       s@(Switch _)   -> Level plr bxs wls (s:sws)
                        _              -> w
-        emptyWorld = World (Player (-1,-1)) [] [] []
+        emptyWorld = Level (Player (-1,-1)) [] [] []
         initWorld = populateWorld (lns >>= sqrs) emptyWorld
 
 toThousand :: Int -> String

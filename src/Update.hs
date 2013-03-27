@@ -5,7 +5,8 @@ module Update(
 	movePlayer,
 	updateBoard,
 	eventHandler,
-	stepWorld
+	stepLevel,
+  stepGame
 ) where
 
 import Graphics.Gloss(Point)
@@ -23,10 +24,10 @@ runGame = do
     (InWindow "Sokoban" (800, 600) (400, 400))
     white
     45
-    (parseLevel level)
-    worldToPicture
-    eventHandler
-    stepWorld
+    (Game 1 (parseLevel level) False)
+    gameToPicture
+    gameEventHandler
+    stepGame
 
 moveBackwards :: Point -> Direction -> Point
 moveBackwards p dir = movePoint p $ fromJust $ lookup dir opposites
@@ -41,38 +42,42 @@ movePoint p@(x,y) dir =
       D -> (x, y-1)
       _ -> p
 
-moveBox :: Direction -> Point -> World Square -> World Square
-moveBox dir point world@(World plr bxs wls sws) = world'
+moveBox :: Direction -> Point -> Level Square -> Level Square
+moveBox dir point world@(Level plr bxs wls sws) = world'
   where boxPoint   = movePoint point dir
-        (World plr' bxs' wls' sws') = fmap getPoint world
+        (Level plr' bxs' wls' sws') = fmap getPoint world
         world'
           | boxPoint `elem` bxs' = world
           | boxPoint `elem` wls' = world
-          | boxPoint `elem` sws' = World 
+          | boxPoint `elem` sws' = Level 
                                    (Player point)
                                    (map Box (boxPoint: delete point bxs'))
                                    wls
                                    sws
-          | otherwise            = World 
+          | otherwise            = Level 
                                    (Player point)
                                    (map Box (boxPoint: delete point bxs'))
                                    wls
                                    sws
 
-movePlayer :: Direction -> Point -> World Square -> World Square
-movePlayer dir point w@(World _ boxes walls switches)
+movePlayer :: Direction -> Point -> Level Square -> Level Square
+movePlayer dir point w@(Level _ boxes walls switches)
   | point `elem` bxs  = moveBox dir point w
   | point `elem` wls  = w
-  | point `elem` sws  = World (Player point) boxes walls switches
-  | otherwise         = World (Player point) boxes walls switches
-  where wPoints@(World _ bxs wls sws) = fmap getPoint w
+  | point `elem` sws  = Level (Player point) boxes walls switches
+  | otherwise         = Level (Player point) boxes walls switches
+  where wPoints@(Level _ bxs wls sws) = fmap getPoint w
 
+gameUpdateBoard = (flip updateBoard) . currentLevel
 
-updateBoard :: Direction -> World Square -> World Square
+updateBoard :: Direction -> Level Square -> Level Square
 updateBoard dir w = movePlayer dir p' w
   where p' = movePoint (getPoint $ player w) dir
 
-eventHandler :: Event -> World Square -> World Square
+gameEventHandler e (Game i lvl won) = Game i newLevel won  
+  where newLevel = eventHandler e lvl
+
+eventHandler :: Event -> Level Square -> Level Square
 eventHandler e@(EventMotion coord) = id
 eventHandler e@(EventKey key keyState mods coord) = 
   if keyState == Down then 
@@ -84,5 +89,8 @@ eventHandler e@(EventKey key keyState mods coord) =
                     _                     -> id
   else id
 
-stepWorld :: Float -> World Square -> World Square
-stepWorld _ = id
+stepGame :: Float -> Game -> Game
+stepGame _ = id
+
+stepLevel :: Float -> Level Square -> Level Square
+stepLevel _ = id
