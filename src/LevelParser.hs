@@ -8,9 +8,7 @@ import Types
 import World
 import Square
 import Text.ParserCombinators.Parsec
-import Control.Monad.Trans
 import Text.Parsec
-import qualified Control.Monad.State as S
 
 parseLevel :: String -> World Square
 parseLevel level = case (player initWorld) of
