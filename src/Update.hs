@@ -4,7 +4,7 @@ module Update(
 	moveBox,
 	movePlayer,
 	updateBoard,
-	eventHandler,
+	gameEventHandler,
 	stepLevel,
   stepGame
 ) where
@@ -14,17 +14,19 @@ import Graphics.Gloss.Interface.Pure.Game
 import World
 import Types
 import Square
+import Save
 import Data.Maybe (fromJust)
 import Data.List(delete)
 import LevelParser
+import Control.Monad.Trans
+import Control.Monad.Trans.State
 
-runGame = do
-  level <- readFile "levels/level001.lvl"
+runGame = loadGame >>= \game ->
   play 
     (InWindow "Sokoban" (800, 600) (400, 400))
     white
     45
-    (Game 1 (parseLevel level) False)
+    game
     gameToPicture
     gameEventHandler
     stepGame
@@ -74,12 +76,14 @@ updateBoard :: Direction -> Level Square -> Level Square
 updateBoard dir w = movePlayer dir p' w
   where p' = movePoint (getPoint $ player w) dir
 
-gameEventHandler e (Game i lvl won) = Game i newLevel won  
-  where newLevel = eventHandler e lvl
-
-eventHandler :: Event -> Level Square -> Level Square
-eventHandler e@(EventMotion coord) = id
-eventHandler e@(EventKey key keyState mods coord) = 
+gameEventHandler :: Event -> Game -> Game
+gameEventHandler e@(EventMotion _) g = id g
+gameEventHandler e@(EventKey key _ _ _) g@(Game i lvl won) = case key of
+  (SpecialKey _) -> Game i (movementHandler e lvl) won
+  (Char       _) -> globalUpdateHandler e g 
+  
+movementHandler :: Event -> Level Square -> Level Square
+movementHandler e@(EventKey key keyState _ _) = 
   if keyState == Down then 
     case key of
                     (SpecialKey KeyUp)    -> updateBoard U
@@ -89,6 +93,14 @@ eventHandler e@(EventKey key keyState mods coord) =
                     _                     -> id
   else id
 
+globalUpdateHandler :: Event -> Game -> Game {- StateT Game IO () -}
+globalUpdateHandler e@(EventKey key keyState _ _) = 
+  if keyState == Down then
+    case key of
+      (Char 'S') -> id
+      _ -> id
+  else id
+  
 stepGame :: Float -> Game -> Game
 stepGame _ = id
 

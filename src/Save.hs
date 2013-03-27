@@ -1,8 +1,9 @@
-module Save (getLevelNumber)
+module Save (
+  loadGame,
+  saveGame
+)
 
 where
-
--- @NOTE: I would like to say "loadGame >>= playGame, that'd be cute."
 
 import Types
 import World
@@ -27,7 +28,7 @@ loadGame = doesFileExist "savegame.sav" >>= \exists ->
               Right x -> x
               Left  e -> error "Failure to read save file."
     return $ Game n (parseLevel lvl) False
-  else return $ Game 1 (parseLevel "levels/level001.lvl") False
+  else startGame
 
 getLevelNumber :: String -> Either P.ParseError Int
 getLevelNumber = P.parse number "(unknown)"
