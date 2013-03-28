@@ -24,13 +24,13 @@ import Control.Monad.Trans.State
 
 runGame = loadGame >>= \game ->
   play 
-    (InWindow "Sokoban" (800, 600) (400, 400))
-    white
-    45
-    game
-    gameToPicture
-    gameEventHandler
-    stepGame
+    (InWindow "Sokoban" (800, 600) (400, 400)) -- Create Window
+    white                                      -- BG Color
+    45                                         -- FPS
+    game                                       -- Init. Game (:: Game)
+    gameToPicture                              -- Draw Game (:: Game -> Picture)
+    gameEventHandler                           -- Update Game (:: Event -> Game -> Game)
+    stepGame                                   -- Step Game (:: Float -> Game -> Game)
 
 moveBackwards :: Point -> Direction -> Point
 moveBackwards p dir = movePoint p $ fromJust $ lookup dir opposites
