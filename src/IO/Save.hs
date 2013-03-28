@@ -1,6 +1,7 @@
 module IO.Save (
   loadGame,
-  saveGame
+  saveGame,
+  startGame
 ) where
 
 import Types.Game
