@@ -1,13 +1,13 @@
-module LevelParser(
+module IO.LevelParser(
 	parseLevel,
   writeSasquatch,
   toThousand
 )where
 
 import Graphics.Gloss(Point)
-import Types
-import World
-import Square
+import Types.Types
+import Types.Square
+import Types.World
 import Text.ParserCombinators.Parsec
 import Text.Parsec
 

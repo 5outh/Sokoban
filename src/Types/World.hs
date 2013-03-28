@@ -1,4 +1,4 @@
-module World(
+module Types.World(
 	levelToPicture,
 	winningLevel,
   gameToPicture,
@@ -9,8 +9,8 @@ module World(
 ) where
 
 import Graphics.Gloss(Picture(..))
-import Types
-import Square
+import Types.Types
+import Types.Square
 
 instance Functor Level where
   fmap f (Level p bxs wls sws) = Level (f p) (map f bxs) (map f wls) (map f sws)

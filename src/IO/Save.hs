@@ -1,14 +1,14 @@
-module Save (
+module IO.Save (
   loadGame,
   saveGame
 )
 
 where
 
-import Types
-import World
-import LevelParser
-import qualified Text.ParserCombinators.Parsec as P
+import Types.Types
+import Types.World
+import IO.LevelParser
+import Text.ParserCombinators.Parsec
 import System.Directory(doesFileExist)
 
 startGame = do
@@ -30,14 +30,14 @@ loadGame = doesFileExist "savegame.sav" >>= \exists ->
     return $ Game n (parseLevel lvl) False
   else startGame
 
-getLevelNumber :: String -> Either P.ParseError Int
-getLevelNumber = P.parse number "(unknown)"
+getLevelNumber :: String -> Either ParseError Int
+getLevelNumber = parse number "(unknown)"
 
-number :: P.Parser Int
+number :: Parser Int
 number = do
-  P.string "level"
-  P.many $ P.char '0'
-  curLvl <- P.many $ P.oneOf "123456789"
+  string "level"
+  many $ char '0'
+  curLvl <- many $ oneOf "123456789"
   return $ readInt curLvl
 
 readInt :: String -> Int

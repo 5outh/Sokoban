@@ -1,4 +1,4 @@
-module Types(
+module Types.Types(
   Square(..),
   Level(..),
   Direction(..),

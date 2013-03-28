@@ -1,4 +1,4 @@
-module Square(
+module Types.Square(
 	getSquare,
 	showSquare,
 	drawSquare,
@@ -6,7 +6,7 @@ module Square(
 ) where
 	
 import Graphics.Gloss
-import Types
+import Types.Types
 
 getSquare :: Char -> [Point -> Square]
 getSquare c = case c of

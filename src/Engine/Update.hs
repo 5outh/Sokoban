@@ -1,4 +1,4 @@
-module Update(
+module Engine.Update(
 	runGame,
 	moveBackwards,
 	moveBox,
@@ -11,13 +11,13 @@ module Update(
 
 import Graphics.Gloss(Point)
 import Graphics.Gloss.Interface.Pure.Game
-import World
-import Types
-import Square
-import Save
+import Types.World
+import Types.Types
+import Types.Square
+import IO.Save
 import Data.Maybe (fromJust)
 import Data.List(delete)
-import LevelParser
+import IO.LevelParser
 import Control.Monad.Trans
 import Control.Monad.Trans.State
 

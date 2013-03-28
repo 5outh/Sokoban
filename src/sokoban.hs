@@ -1,11 +1,11 @@
 {-# LANGUAGE DoAndIfThenElse #-}
 module Main where
 
-import Update
-import LevelParser
+import Engine.Update
+import IO.LevelParser
+import IO.Save
 import Data.Char(toLower)
 import System.Environment(getArgs)
-import Save
 
 main = do
   args <- getArgs
