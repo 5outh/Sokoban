@@ -1,12 +1,9 @@
 module IO.Save (
   loadGame,
   saveGame
-)
+) where
 
-where
-
-import Types.Types
-import Types.World
+import Types.Game
 import IO.LevelParser
 import Text.ParserCombinators.Parsec
 import System.Directory(doesFileExist)

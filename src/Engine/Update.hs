@@ -11,9 +11,10 @@ module Engine.Update(
 
 import Graphics.Gloss(Point)
 import Graphics.Gloss.Interface.Pure.Game
-import Types.World
-import Types.Types
+import Types.Misc
 import Types.Square
+import Types.Game
+import Types.Level
 import IO.Save
 import Data.Maybe (fromJust)
 import Data.List(delete)

@@ -5,11 +5,12 @@ module IO.LevelParser(
 )where
 
 import Graphics.Gloss(Point)
-import Types.Types
+import Types.Misc
 import Types.Square
-import Types.World
 import Text.ParserCombinators.Parsec
 import Text.Parsec
+import Types.Level
+import Types.Game(toThousand)
 
 parseLevel :: String -> Level Square
 parseLevel level = case (player initWorld) of

@@ -2,11 +2,18 @@ module Types.Square(
 	getSquare,
 	showSquare,
 	drawSquare,
-	getPoint
+	getPoint,
+  Square(..)
 ) where
 	
 import Graphics.Gloss
-import Types.Types
+
+data Square = Player Point
+            | Box Point 
+            | Wall Point 
+            | Switch Point 
+            | Floor Point
+            deriving (Show, Eq)
 
 getSquare :: Char -> [Point -> Square]
 getSquare c = case c of
