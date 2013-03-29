@@ -1,23 +1,15 @@
-import Types.Game
-import IO.Save
-import Control.Monad.State
+import Types.Button
+import Graphics.Gloss.Interface.Pure.Animate
+import Data.Monoid((<>))
 
-nextLvl (Game i lvl w) = Game (succ i) lvl w
+button  = makeButton "Restart" id (0, 0) 
+button' = makeButton "Exit"    id (0, 200)
 
-updateGame :: StateT Game IO ()
-updateGame = do
-  game <- get
-  --lift $ saveGame game
-  lift $ putStrLn "Wat"
-  
-process :: [Char] -> StateT Game IO ()
-process cs = forM_ cs $ \c -> case c of
-  '+' -> updateGame
-  '-' -> modify id
-  _   -> modify id
+render _ = renderButton button <> renderButton button'
 
-f game = execStateT (process "+-+") game
-  
-main = do
-  game <- startGame
-  runStateT (process "+-+") game
+summat _ = Circle 10
+
+main = animate 
+  (InWindow "Test" (800, 600) (400, 400))
+  white
+  render

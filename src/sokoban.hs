@@ -7,6 +7,7 @@ import IO.Save
 import Data.Char(toLower)
 import System.Environment(getArgs)
 import System.Exit
+import Types.Button -- for testing
 
 main = do
   args <- getArgs
