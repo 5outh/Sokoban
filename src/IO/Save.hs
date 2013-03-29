@@ -15,11 +15,9 @@ startGame = do
   let lvl' = parseLevel lvl
   return $ Game 1 lvl' False
 
---not writing?
 saveGame :: Game -> IO ()
 saveGame = writeFile "savegame.sav" . show . levelNumber
 
---not Loading?
 loadGame :: IO Game
 loadGame = doesFileExist "savegame.sav" >>= \exists -> 
   if exists then do
