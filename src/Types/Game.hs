@@ -16,8 +16,8 @@ data Game = Game
     currentLevel :: Level Square,
     won          :: Bool }
     
-gameToPicture :: Game -> Picture
-gameToPicture (Game _ lvl _) = levelToPicture lvl
+gameToPicture :: Game -> IO Picture
+gameToPicture (Game _ lvl _) = return $ levelToPicture lvl
 
 nextLevel :: Game -> Int
 nextLevel (Game i _ _) = succ i

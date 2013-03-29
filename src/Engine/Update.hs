@@ -10,7 +10,7 @@ module Engine.Update(
 ) where
 
 import Graphics.Gloss(Point)
-import Graphics.Gloss.Interface.Pure.Game
+import Graphics.Gloss.Interface.IO.Game
 import Types.Misc
 import Types.Square
 import Types.Game
@@ -23,7 +23,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.State
 
 runGame = loadGame >>= \game ->
-  play 
+  playIO 
     (InWindow "Sokoban" (800, 600) (400, 400)) -- Create Window
     white                                      -- BG Color
     45                                         -- FPS
@@ -77,11 +77,11 @@ updateBoard :: Direction -> Level Square -> Level Square
 updateBoard dir w = movePlayer dir p' w
   where p' = movePoint (getPoint $ player w) dir
 
-gameEventHandler :: Event -> Game -> Game
-gameEventHandler e@(EventMotion _) g = id g
+gameEventHandler :: Event -> Game -> IO Game
+gameEventHandler e@(EventMotion _) g = return g
 gameEventHandler e@(EventKey key _ _ _) g@(Game i lvl won) = case key of
-  (SpecialKey _) -> Game i (movementHandler e lvl) won
-  (Char       _) -> globalUpdateHandler e g 
+  (SpecialKey _) -> return $ Game i (movementHandler e lvl) won
+  (Char       _) -> return $ globalUpdateHandler e g --this will change to allow Saves
   
 movementHandler :: Event -> Level Square -> Level Square
 movementHandler e@(EventKey key keyState _ _) = 
@@ -102,8 +102,8 @@ globalUpdateHandler e@(EventKey key keyState _ _) =
       _ -> id
   else id
   
-stepGame :: Float -> Game -> Game
-stepGame _ = id
+stepGame :: Float -> Game -> IO Game
+stepGame _ = return . id
 
 stepLevel :: Float -> Level Square -> Level Square
 stepLevel _ = id
