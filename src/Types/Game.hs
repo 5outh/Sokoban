@@ -4,7 +4,8 @@ module Types.Game(
   nextLevel,
   winningGame,
   gameToFileName,
-  toThousand
+  toThousand,
+  goToNextLevel
 ) where
 
 import Types.Square
@@ -17,7 +18,9 @@ data Game = Game
     won          :: Bool }
     
 gameToPicture :: Game -> IO Picture
-gameToPicture (Game _ lvl _) = return $ levelToPicture lvl
+gameToPicture (Game _ lvl w) = 
+  if not w then return $ levelToPicture lvl
+  else return $ Translate (-100) 0 $ Scale 0.5 0.5 $ Text "You Win!"
 
 nextLevel :: Game -> Int
 nextLevel (Game i _ _) = succ i
@@ -34,3 +37,6 @@ toThousand x
   | x < 100  = "0" ++ show x
   | x < 1000 = show x
   | otherwise = error "number is greater than 1000"
+  
+goToNextLevel :: Game -> Game
+goToNextLevel (Game i lvl w) = Game (succ i) lvl w

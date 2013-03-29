@@ -1,7 +1,8 @@
 module IO.Save (
   loadGame,
   saveGame,
-  startGame
+  startGame,
+  goToNextLevelAndSave
 ) where
 
 import Types.Game
@@ -14,17 +15,17 @@ startGame = do
   let lvl' = parseLevel lvl
   return $ Game 1 lvl' False
 
+--not writing?
 saveGame :: Game -> IO ()
-saveGame = writeFile "savegame.sav" . gameToFileName
+saveGame = writeFile "savegame.sav" . show . levelNumber
 
+--not Loading?
 loadGame :: IO Game
 loadGame = doesFileExist "savegame.sav" >>= \exists -> 
   if exists then do
     levelName <- readFile "savegame.sav"
-    lvl       <- readFile levelName
-    let n = case getLevelNumber levelName of
-              Right x -> x
-              Left  e -> error "Failure to read save file."
+    lvl       <- readFile $ intToFileName (readInt levelName)
+    let n = readInt levelName
     return $ Game n (parseLevel lvl) False
   else startGame
 
@@ -40,3 +41,14 @@ number = do
 
 readInt :: String -> Int
 readInt x = read x :: Int
+
+goToNextLevelAndSave :: Game -> IO Game
+goToNextLevelAndSave g@(Game i _ _) = do
+  let next = goToNextLevel g
+  saveGame next
+  g' <- loadGame
+  return g'
+
+
+intToFileName :: Int -> String
+intToFileName i = "levels/level" ++ (toThousand i) ++ ".lvl"

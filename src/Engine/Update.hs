@@ -81,7 +81,8 @@ gameEventHandler :: Event -> Game -> IO Game
 gameEventHandler e@(EventMotion _) g = return g
 gameEventHandler e@(EventKey key _ _ _) g@(Game i lvl won) = case key of
   (SpecialKey _) -> return $ Game i (movementHandler e lvl) won
-  (Char       _) -> return $ globalUpdateHandler e g --this will change to allow Saves
+  (Char       _) -> globalUpdateHandler e g --this will change to allow Saves
+  _              -> return g
   
 movementHandler :: Event -> Level Square -> Level Square
 movementHandler e@(EventKey key keyState _ _) = 
@@ -94,16 +95,18 @@ movementHandler e@(EventKey key keyState _ _) =
                     _                     -> id
   else id
 
-globalUpdateHandler :: Event -> Game -> Game {- StateT Game IO () -}
-globalUpdateHandler e@(EventKey key keyState _ _) = 
+globalUpdateHandler :: Event -> Game -> IO Game 
+globalUpdateHandler e@(EventKey key keyState _ _) g = 
   if keyState == Down then
     case key of
-      (Char 'S') -> id
-      _ -> id
-  else id
+      (Char 'S') -> do
+        saveGame g
+        return g
+      _ -> return g
+  else return g
   
 stepGame :: Float -> Game -> IO Game
-stepGame _ = return . id
+stepGame f g@(Game i lvl w) = if winningGame g then goToNextLevelAndSave g else return g --broked
 
 stepLevel :: Float -> Level Square -> Level Square
 stepLevel _ = id

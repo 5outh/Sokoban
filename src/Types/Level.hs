@@ -18,10 +18,7 @@ instance Functor Level where
   fmap f (Level p bxs wls sws) = Level (f p) (map f bxs) (map f wls) (map f sws)
 
 levelToPicture :: Level Square -> Picture
-levelToPicture w@(Level p bxs wls sws) = 
-  if not $ winningLevel w then
-    Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
-  else Translate (-100) 0 $ Scale 0.5 0.5 $ Text "You Win!"
+levelToPicture w@(Level p bxs wls sws) = Pictures $ map showSquare $ (wls ++ sws ++ bxs ++ [p])
 
 winningLevel :: Level Square -> Bool
 winningLevel w = all (`elem` bxs) sws
