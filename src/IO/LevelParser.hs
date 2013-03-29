@@ -17,9 +17,14 @@ parseLevel level = case (player initWorld) of
                         (Player (-1,-1)) -> error "No player on board"
                         (Player _      ) -> initWorld
                         _                -> error "Internal misbehavior -> Player is not what it seems."
-  where lns = zip [1..] $ reverse $ lines level
+  where cIndices =  [fromIntegral (-l)..] :: [Float]
+					where l = (length lns) `div` 2
+        rIndices = [fromIntegral (-l)..] :: [Float]
+          where l = (maximum $ map length lns) `div` 2
+        lns = reverse $ lines level
+        lns' = zip cIndices lns
         sqrs :: (Float, [Char]) -> [Square]
-        sqrs (a, xs) = concatMap fix $ zip (map getSquare xs) ((zip [1..] (repeat a)) :: [Point])
+        sqrs (a, xs) = concatMap fix $ zip (map getSquare xs) ((zip rIndices (repeat a)) :: [Point])
                         where fix (xs, y) = zipWith ($) xs (repeat y)
         populateWorld [] w = w
         populateWorld (p:points) w@(Level plr bxs wls sws) = populateWorld points w'
@@ -30,7 +35,7 @@ parseLevel level = case (player initWorld) of
                        s@(Switch _)   -> Level plr bxs wls (s:sws)
                        _              -> w
         emptyWorld = Level (Player (-1,-1)) [] [] []
-        initWorld = populateWorld (lns >>= sqrs) emptyWorld
+        initWorld = populateWorld (lns' >>= sqrs) emptyWorld
         
 writeSasquatch :: FilePath -> IO ()
 writeSasquatch file = do
