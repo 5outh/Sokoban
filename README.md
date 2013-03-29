@@ -6,8 +6,10 @@ A Sokoban implementation using Haskell and Gloss.
 Currently uses David W. Skinner's Sasquatch packs for levels: http://users.bentonrea.com/~sasquatch/sokoban/
 
 Controls:
-Move: Arrow keys
-Retry: r
+
+*Move: Arrow keys
+
+*Retry: r
 
 If you wish to load a new pack of levels from the sasquatch pack, simply run:
 
