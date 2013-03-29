@@ -1,10 +1,14 @@
+<<<<<<< HEAD
 {-# LANGUAGE ForeignFunctionInterface #-}
+=======
+>>>>>>> Idk?
 module Paths_Sokoban (
     version,
     getBinDir, getLibDir, getDataDir, getLibexecDir,
     getDataFileName
   ) where
 
+<<<<<<< HEAD
 import Foreign
 import Foreign.C
 import qualified Control.Exception as Exception
@@ -12,12 +16,18 @@ import Data.Version (Version(Version, versionBranch, versionTags))
 import System.Environment (getEnv)
 import Prelude ((++), FilePath, IO, return)
 
+=======
+import qualified Control.Exception as Exception
+import Data.Version (Version(..))
+import System.Environment (getEnv)
+>>>>>>> Idk?
 catchIO :: IO a -> (Exception.IOException -> IO a) -> IO a
 catchIO = Exception.catch
 
 
 version :: Version
 version = Version {versionBranch = [0,1,0,0], versionTags = []}
+<<<<<<< HEAD
 prefix, bindirrel :: FilePath
 prefix        = "C:\\Users\\bkovach.CAESAD\\Documents\\MathNotes\\Sokoban\\cabal-dev/"
 bindirrel     = "bin"
@@ -33,10 +43,25 @@ getDataDir =  catchIO (getEnv "Sokoban_datadir") (\_ -> getPrefixDirRel "Sokoban
 
 getLibexecDir :: IO FilePath
 getLibexecDir = getPrefixDirRel "Sokoban-0.1.0.0"
+=======
+bindir, libdir, datadir, libexecdir :: FilePath
+
+bindir     = "/Users/macbook/Library/Haskell/ghc-7.4.2/lib/Sokoban-0.1.0.0/bin"
+libdir     = "/Users/macbook/Library/Haskell/ghc-7.4.2/lib/Sokoban-0.1.0.0/lib"
+datadir    = "/Users/macbook/Library/Haskell/ghc-7.4.2/lib/Sokoban-0.1.0.0/share"
+libexecdir = "/Users/macbook/Library/Haskell/ghc-7.4.2/lib/Sokoban-0.1.0.0/libexec"
+
+getBinDir, getLibDir, getDataDir, getLibexecDir :: IO FilePath
+getBinDir = catchIO (getEnv "Sokoban_bindir") (\_ -> return bindir)
+getLibDir = catchIO (getEnv "Sokoban_libdir") (\_ -> return libdir)
+getDataDir = catchIO (getEnv "Sokoban_datadir") (\_ -> return datadir)
+getLibexecDir = catchIO (getEnv "Sokoban_libexecdir") (\_ -> return libexecdir)
+>>>>>>> Idk?
 
 getDataFileName :: FilePath -> IO FilePath
 getDataFileName name = do
   dir <- getDataDir
+<<<<<<< HEAD
   return (dir `joinFileName` name)
 
 getPrefixDirRel :: FilePath -> IO FilePath
@@ -88,3 +113,6 @@ pathSeparator = '\\'
 
 isPathSeparator :: Char -> Bool
 isPathSeparator c = c == '/' || c == '\\'
+=======
+  return (dir ++ "/" ++ name)
+>>>>>>> Idk?

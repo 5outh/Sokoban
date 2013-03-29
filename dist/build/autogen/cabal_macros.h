@@ -7,12 +7,21 @@
   (major1) == 4 && (major2) <  5 || \
   (major1) == 4 && (major2) == 5 && (minor) <= 1)
 
+<<<<<<< HEAD
 /* package gloss-1.7.7.201204.1 */
 #define VERSION_gloss "1.7.7.201204.1"
 #define MIN_VERSION_gloss(major1,major2,minor) (\
   (major1) <  1 || \
   (major1) == 1 && (major2) <  7 || \
   (major1) == 1 && (major2) == 7 && (minor) <= 7)
+=======
+/* package gloss-1.7.6.5 */
+#define VERSION_gloss "1.7.6.5"
+#define MIN_VERSION_gloss(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  7 || \
+  (major1) == 1 && (major2) == 7 && (minor) <= 6)
+>>>>>>> Idk?
 
 /* package parsec-3.1.3 */
 #define VERSION_parsec "3.1.3"
