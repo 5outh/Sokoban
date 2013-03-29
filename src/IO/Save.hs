@@ -6,7 +6,7 @@ module IO.Save (
   goToNextLevelAndSave,
   goToNextLevelWithoutSaving,
   writeSasquatch,
-  readInt
+  readInt,
 ) where
 
 import Types.Game
@@ -23,7 +23,7 @@ startGameAtLevel i = doesFileExist (intToFileName i) >>= \exists ->
   if exists then do
     lvl <- readFile (intToFileName i)
     let lvl' = parseLevel lvl
-    return $ Game i lvl' False
+    return $ Game i lvl' False 
   else putStrLn ("Level " ++ show i ++ " does not exist.") >> exitFailure
 
 saveGame :: Game -> IO ()

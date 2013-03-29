@@ -15,6 +15,7 @@ import Graphics.Gloss.Interface.IO.Game
 import Types.Misc
 import Types.Square
 import Types.Game
+import Types.Button
 import Types.Level
 import IO.Save
 import Data.Maybe (fromJust)
@@ -22,6 +23,7 @@ import Data.List(delete)
 import IO.LevelParser
 import Control.Monad.Trans
 import Control.Monad.Trans.State
+import System.Exit(exitSuccess)
 
 runGame = loadGame >>= \game ->
   playIO 
@@ -92,8 +94,7 @@ gameEventHandler :: Event -> Game -> IO Game
 gameEventHandler e@(EventMotion _) g = return g
 gameEventHandler e@(EventKey key _ _ _) g@(Game i lvl won) = case key of
   (SpecialKey _) -> return $ Game i (movementHandler e lvl) won
-  (Char       _) -> globalUpdateHandler e g --this will change to allow Saves
-  _              -> return g
+  _              -> globalUpdateHandler e g
   
 movementHandler :: Event -> Level Square -> Level Square
 movementHandler e@(EventKey key keyState _ _) = 
@@ -107,13 +108,16 @@ movementHandler e@(EventKey key keyState _ _) =
   else id
 
 globalUpdateHandler :: Event -> Game -> IO Game 
-globalUpdateHandler e@(EventKey key keyState _ _) g = 
+globalUpdateHandler e@(EventKey key keyState _ p) g = 
   if keyState == Down then
     case key of
       (Char 'S') -> do
         saveGame g
         return g
       (Char 'r') -> loadGame
+      (MouseButton LeftButton) -> if      p `inRect` (rect restartButton) then loadGame
+                                  else if p `inRect` (rect exitButton)    then exitSuccess
+                                  else return g
       _ -> return g
   else return g
   
