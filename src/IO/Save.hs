@@ -13,15 +13,18 @@ import Types.Game
 import IO.LevelParser
 import Text.ParserCombinators.Parsec
 import System.Directory(doesFileExist)
+import System.Exit(exitFailure)
 
 startGame :: IO Game
 startGame = startGameAtLevel 1
 
 startGameAtLevel :: Int -> IO Game
-startGameAtLevel i = do
-  lvl <- readFile (intToFileName i)
-  let lvl' = parseLevel lvl
-  return $ Game i lvl' False
+startGameAtLevel i = doesFileExist (intToFileName i) >>= \exists ->
+  if exists then do
+    lvl <- readFile (intToFileName i)
+    let lvl' = parseLevel lvl
+    return $ Game i lvl' False
+  else putStrLn ("Level " ++ show i ++ " does not exist.") >> exitFailure
 
 saveGame :: Game -> IO ()
 saveGame = writeFile "savegame.sav" . show . levelNumber

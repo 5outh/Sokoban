@@ -38,7 +38,7 @@ toThousand x
   | x < 10   = "00" ++ show x
   | x < 100  = "0" ++ show x
   | x < 1000 = show x
-  | otherwise = error "number is greater than 1000"
+  | otherwise = error ("Level " ++ show x ++ " cannot be saved or does not exist.")
   
 goToNextLevel :: Game -> Game
 goToNextLevel (Game i lvl w) = Game (succ i) lvl w

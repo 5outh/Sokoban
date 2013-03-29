@@ -27,14 +27,14 @@ getSquare c = case c of
 
 showSquare :: Square -> Picture
 showSquare square = case square of
-                     (Wall p)         -> Color black  $ drawSquare p
-                     (Player p)       -> Color red    $ drawSquare p          
-                     (Box p)          -> Color violet $ drawSquare p
-                     (Switch p)       -> Color blue   $ drawSquare p   
-                     (Floor p)        -> Color white  $ drawSquare p
+                     (Wall p)         -> Color black  $ drawSquare p 16
+                     (Player p)       -> Color red    $ drawSquare p 16      
+                     (Box p)          -> Color violet $ drawSquare p 16
+                     (Switch p)       -> Color blue   $ drawSquare p 16   
+                     (Floor p)        -> Color white  $ drawSquare p 16
 
-drawSquare :: (Float, Float) -> Picture
-drawSquare (x, y) = Translate (16*x) (16*y) $ rectangleSolid 16 16
+drawSquare :: (Float, Float) -> Float -> Picture
+drawSquare (x, y) scale = Translate (16*x) (16*y) $ rectangleSolid scale scale
 
 getPoint :: Square -> Point
 getPoint square = case square of
