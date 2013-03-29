@@ -1,5 +1,6 @@
 module Engine.Update(
 	runGame,
+	runGameFromLevel,
 	moveBackwards,
 	moveBox,
 	movePlayer,
@@ -28,9 +29,19 @@ runGame = loadGame >>= \game ->
     white                                      -- BG Color
     45                                         -- FPS
     game                                       -- Init. Game (:: Game)
-    gameToPicture                              -- Draw Game (:: Game -> Picture)
-    gameEventHandler                           -- Update Game (:: Event -> Game -> Game)
-    stepGame                                   -- Step Game (:: Float -> Game -> Game)
+    gameToPicture                              -- Draw Game (:: Game -> IO Picture)
+    gameEventHandler                           -- Update Game (:: Event -> Game -> IO Game)
+    stepGame                                   -- Step Game (:: Float -> Game -> IO Game)
+
+runGameFromLevel n = startGameAtLevel n >>= \game -> 
+  playIO 
+    (InWindow "Sokoban" (800, 600) (400, 400)) -- Create Window
+    white                                      -- BG Color
+    45                                         -- FPS
+    game                                       -- Init. Game (:: Game)
+    gameToPicture                              -- Draw Game (:: Game -> IO Picture)
+    gameEventHandler                           -- Update Game (:: Event -> Game -> IO Game)
+    stepGameWithoutSave                        -- Step Game (:: Float -> Game -> IO Game)
 
 moveBackwards :: Point -> Direction -> Point
 moveBackwards p dir = movePoint p $ fromJust $ lookup dir opposites
@@ -102,11 +113,16 @@ globalUpdateHandler e@(EventKey key keyState _ _) g =
       (Char 'S') -> do
         saveGame g
         return g
+      (Char 'r') -> loadGame
       _ -> return g
   else return g
   
 stepGame :: Float -> Game -> IO Game
-stepGame f g@(Game i lvl w) = if winningGame g then goToNextLevelAndSave g else return g --broked
+stepGame f g@(Game i lvl w) = if winningGame g then goToNextLevelAndSave g else return g
+
+stepGameWithoutSave :: Float -> Game -> IO Game
+stepGameWithoutSave f g | winningGame g = goToNextLevelWithoutSaving g
+                        | otherwise     = return g
 
 stepLevel :: Float -> Level Square -> Level Square
 stepLevel _ = id

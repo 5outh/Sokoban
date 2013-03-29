@@ -1,6 +1,6 @@
 module IO.LevelParser(
 	parseLevel,
-  writeSasquatch,
+	parseSasquatch,
   toThousand
 )where
 
@@ -36,18 +36,6 @@ parseLevel level = case (player initWorld) of
                        _              -> w
         emptyWorld = Level (Player (-1,-1)) [] [] []
         initWorld = populateWorld (lns' >>= sqrs) emptyWorld
-        
-writeSasquatch :: FilePath -> IO ()
-writeSasquatch file = do
-  contents <- readFile file
-  let levels = case parseSasquatch contents of
-                  Right a -> zip (map 
-                             (\x -> "levels/level" ++ toThousand x ++ ".lvl") [1..]) 
-                             a
-                  Left _  -> error "Parse error"
-      doWrite (a, b) = writeFile a b
-  mapM_ doWrite levels
-  return ()
 
 parseSasquatch :: String -> Either ParseError [String]
 parseSasquatch = parse (many level) "(unknown)"

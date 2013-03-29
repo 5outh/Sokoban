@@ -11,6 +11,7 @@ module Types.Game(
 import Types.Square
 import Types.Level
 import Graphics.Gloss(Picture(..))
+import Data.Monoid
 
 data Game = Game
   { levelNumber  :: Int,
@@ -18,9 +19,10 @@ data Game = Game
     won          :: Bool }
     
 gameToPicture :: Game -> IO Picture
-gameToPicture (Game _ lvl w) = 
-  if not w then return $ levelToPicture lvl
+gameToPicture (Game i lvl w) = 
+  if not w then return $ displayLevel `mappend` levelToPicture lvl
   else return $ Translate (-100) 0 $ Scale 0.5 0.5 $ Text "You Win!"
+    where displayLevel = Scale 0.5 0.5 $ Translate (-700) (450) $ Text $  "Level " ++ (show i)
 
 nextLevel :: Game -> Int
 nextLevel (Game i _ _) = succ i

@@ -6,10 +6,27 @@ import IO.LevelParser
 import IO.Save
 import Data.Char(toLower)
 import System.Environment(getArgs)
+import System.Exit
 
 main = do
   args <- getArgs
   if null args then runGame
-  else case (map toLower (head args)) of
-    "sasquatch" -> writeSasquatch "../m1.txt"
-    _           -> runGame
+  else case args of
+    (x:[]) -> putStrLn ("Could not understand request " ++ x) >> exitFailure
+    (a:b:_) -> case a of
+      "sasquatch" -> do
+        putStrLn "Are you sure you want to wipe your progress and load a new level pack? y/n"
+        ans <- getLine
+        checkSasquatch (toLower $ head ans) b
+      "level" -> runGameFromLevel (readInt b)
+      _           -> (putStrLn "Could not understand request") >> exitFailure
+
+checkSasquatch :: Char -> String -> IO ()
+checkSasquatch c f = do
+  case c of
+    'y' -> writeSasquatch f >> runGame
+    'n' -> exitSuccess
+    _   -> do 
+      putStrLn "could not understand request, please try another answer:"
+      ans <- getLine
+      checkSasquatch (toLower $ head ans) f
