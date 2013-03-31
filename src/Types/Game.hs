@@ -21,9 +21,11 @@ data Game = Game
     
 gameToPicture :: Game -> IO Picture
 gameToPicture (Game i lvl w) = 
-  if not w then return $ displayLevel <> levelToPicture lvl -- <> (Pictures $ map buttonToPicture [restartButton,exitButton])
+  if not w then do
+      lvl' <- levelToPicture lvl
+      let levelText = Scale 0.5 0.5 $ Translate (-700) (450) $ Text $ "Level " ++ (show i)
+      return $ levelText <> lvl'
   else return $ Translate (-100) 0 $ Scale 0.5 0.5 $ Text "You Win!"
-    where displayLevel = Scale 0.5 0.5 $ Translate (-700) (450) $ Text $ "Level " ++ (show i)
 
 nextLevel :: Game -> Int
 nextLevel (Game i _ _) = succ i

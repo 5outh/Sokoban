@@ -1,7 +1,7 @@
 module Types.Square(
 	getSquare,
 	showSquare,
-	drawSquare,
+	drawSquareAt,
 	getPoint,
   Square(..)
 ) where
@@ -25,16 +25,21 @@ getSquare c = case c of
                 '$' -> [Box]
                 _   -> []
 
-showSquare :: Square -> Picture
+showSquare :: Square -> IO Picture
 showSquare square = case square of
-                     (Wall p)         -> Color black  $ drawSquare p 16
-                     (Player p)       -> Color red    $ drawSquare p 16      
-                     (Box p)          -> Color violet $ drawSquare p 16
-                     (Switch p)       -> Color blue   $ drawSquare p 16   
-                     (Floor p)        -> Color white  $ drawSquare p 16
+                     (Wall p)         -> return $ Color black  $ drawSquareAt p 16
+                     (Player p)       -> drawBMPAt p "./Images/Player.bmp"    
+                     (Box p)          -> return $ Color violet $ drawSquareAt p 16
+                     (Switch p)       -> return $ Color blue   $ drawSquareAt p 16   
+                     (Floor p)        -> return $ Color white  $ drawSquareAt p 16
 
-drawSquare :: (Float, Float) -> Float -> Picture
-drawSquare (x, y) scale = Translate (16*x) (16*y) $ rectangleSolid scale scale
+drawSquareAt :: Point -> Float -> Picture
+drawSquareAt (x, y) scale = Translate (16*x) (16*y) $ rectangleSolid scale scale
+
+drawBMPAt :: Point -> String -> IO Picture
+drawBMPAt (x, y) path = do
+  bmp <- loadBMP path
+  return $ Translate (16*x) (16*y) $ bmp
 
 getPoint :: Square -> Point
 getPoint square = case square of

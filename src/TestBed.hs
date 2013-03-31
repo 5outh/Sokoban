@@ -1,15 +1,10 @@
 import Types.Button
-import Graphics.Gloss.Interface.Pure.Animate
+import Graphics.Gloss.Interface.IO.Animate
 import Data.Monoid((<>))
 
-button  = makeButton "Restart" id (0, 0) 
-button' = makeButton "Exit"    id (0, 200)
+render _ = loadBMP "./Images/Player.bmp"
 
-render _ = renderButton button <> renderButton button'
-
-summat _ = Circle 10
-
-main = animate 
+main = animateIO
   (InWindow "Test" (800, 600) (400, 400))
   white
   render
