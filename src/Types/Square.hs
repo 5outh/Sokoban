@@ -27,7 +27,7 @@ getSquare c = case c of
 
 showSquare :: Square -> IO Picture
 showSquare square = case square of
-                     (Wall p)         -> drawBMPAt p "./Images/Wall.bmp"
+                     (Wall p)         -> return $ Color black  $ drawSquareAt p 16 --drawBMPAt p "./Images/Wall.bmp"
                      (Player p)       -> drawBMPAt p "./Images/Player.bmp"    
                      (Box p)          -> return $ Color violet $ drawSquareAt p 16
                      (Switch p)       -> drawBMPAt p "./Images/Switch.bmp"   
