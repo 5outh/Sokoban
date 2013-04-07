@@ -25,16 +25,23 @@ getSquare c = case c of
                 '$' -> [Box]
                 _   -> []
 
+wallSprite   = loadBMP "./Images/Wall.bmp"
+playerSprite = loadBMP "./Images/Player.bmp"
+switchSprite = loadBMP "./Images/Switch.bmp"
+
 showSquare :: Square -> IO Picture
 showSquare square = case square of
-                     (Wall p)         -> return $ Color black  $ drawSquareAt p 16 --drawBMPAt p "./Images/Wall.bmp"
-                     (Player p)       -> drawBMPAt p "./Images/Player.bmp"    
+                     (Wall p)         -> wallSprite   >>= (return . drawPictureAt p)
+                     (Player p)       -> playerSprite >>= (return . drawPictureAt p)
                      (Box p)          -> return $ Color violet $ drawSquareAt p 16
-                     (Switch p)       -> drawBMPAt p "./Images/Switch.bmp"   
+                     (Switch p)       -> switchSprite >>= (return . drawPictureAt p)  
                      (Floor p)        -> return $ Color white  $ drawSquareAt p 16
 
 drawSquareAt :: Point -> Float -> Picture
 drawSquareAt (x, y) scale = Translate (16*x) (16*y) $ rectangleSolid scale scale
+
+drawPictureAt :: Point -> Picture -> Picture
+drawPictureAt (x, y) pic = Translate (16*x) (16*y) $ pic
 
 drawBMPAt :: Point -> String -> IO Picture
 drawBMPAt (x, y) path = do
