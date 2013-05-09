@@ -29,12 +29,13 @@ wallSprite   = loadBMP "./Images/Wall.bmp"
 playerSprite = loadBMP "./Images/Player.bmp"
 switchSprite = loadBMP "./Images/Switch.bmp"
 
+{- for pictures: --wallSprite   >>= (return . drawPictureAt p) -}
 showSquare :: Square -> IO Picture
 showSquare square = case square of
-                     (Wall p)         -> wallSprite   >>= (return . drawPictureAt p)
-                     (Player p)       -> playerSprite >>= (return . drawPictureAt p)
+                     (Wall p)         -> return $ Color black  $ drawSquareAt p 16
+                     (Player p)       -> return $ Color red    $ drawSquareAt p 16 
                      (Box p)          -> return $ Color violet $ drawSquareAt p 16
-                     (Switch p)       -> switchSprite >>= (return . drawPictureAt p)  
+                     (Switch p)       -> return $ Color blue   $ drawSquareAt p 16  
                      (Floor p)        -> return $ Color white  $ drawSquareAt p 16
 
 drawSquareAt :: Point -> Float -> Picture
