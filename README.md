@@ -7,9 +7,9 @@ Currently uses David W. Skinner's Sasquatch packs for levels: http://users.bento
 
 Controls:
 
-*Move: Arrow keys
+* Move: Arrow keys
 
-*Retry: r
+* Retry: r
 
 If you wish to load a new pack of levels from the sasquatch pack, simply run:
 
