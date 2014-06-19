@@ -95,6 +95,7 @@ gameEventHandler e@(EventMotion _) g = return g
 gameEventHandler e@(EventKey key _ _ _) g@(Game i lvl won) = case key of
   (SpecialKey _) -> return $ Game i (movementHandler e lvl) won
   _              -> globalUpdateHandler e g
+gameEventHandler _ g = return g
   
 movementHandler :: Event -> Level Square -> Level Square
 movementHandler e@(EventKey key keyState _ _) = 
