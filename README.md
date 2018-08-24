@@ -3,7 +3,7 @@ Sokoban
 
 A Sokoban implementation using Haskell and Gloss.
 
-Currently uses David W. Skinner's Sasquatch packs for levels: http://users.bentonrea.com/~sasquatch/sokoban/
+Currently uses David W. Skinner's Sasquatch packs for levels: http://www.abelmartin.com/rj/sokobanJS/Skinner/David%20W.%20Skinner%20-%20Sokoban.htm
 
 Controls:
 
